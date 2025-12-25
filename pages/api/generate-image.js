@@ -23,10 +23,14 @@ export default async function handler(req, res) {
       body: JSON.stringify({ text }),
     });
 
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const data = await response.json();
     res.json(data);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to generate image' });
   }
-    }
+      }

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de Imagens com DeepAI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #image-container {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Gerador de Imagens com DeepAI</h1>
+  <form id="generate-form">
+    <input type="text" id="text-input" placeholder="Digite um texto...">
+    <button type="submit">Gerar Imagem</button>
+  </form>
+  <div id="image-container"></div>
+
+  <script>
+    const form = document.getElementById('generate-form');
+    const imageContainer = document.getElementById('image-container');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const text = document.getElementById('text-input').value;
+      const response = await fetch('/api/generate-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text })
+      });
+
+      const data = await response.json();
+      const imageUrl = data.output_url;
+      const img = document.createElement('img');
+      img.src = imageUrl;
+      imageContainer.innerHTML = '';
+      imageContainer.appendChild(img);
+    });
+  </script>
+</body>
+</html>

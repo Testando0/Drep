@@ -29,20 +29,29 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const text = document.getElementById('text-input').value;
-      const response = await fetch('/api/generate-image', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ text })
-      });
+      try {
+        const response = await fetch('/api/generate-image', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ text })
+        });
 
-      const data = await response.json();
-      const imageUrl = data.output_url;
-      const img = document.createElement('img');
-      img.src = imageUrl;
-      imageContainer.innerHTML = '';
-      imageContainer.appendChild(img);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const imageUrl = data.output_url;
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        imageContainer.innerHTML = '';
+        imageContainer.appendChild(img);
+      } catch (error) {
+        console.error(error);
+        alert('Erro ao gerar imagem!');
+      }
     });
   </script>
 </body>
